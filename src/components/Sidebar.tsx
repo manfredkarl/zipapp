@@ -1,5 +1,6 @@
 
 import { HomeIcon, MessageSquareIcon, ReceiptIcon, FolderIcon } from "lucide-react";
+import { Link, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
 
 const navigation = [
@@ -10,6 +11,8 @@ const navigation = [
 ];
 
 const Sidebar = () => {
+  const location = useLocation();
+
   return (
     <div className="flex h-full flex-col bg-white border-r animate-fadeIn">
       <div className="flex flex-col flex-grow pt-5 pb-4 overflow-y-auto">
@@ -18,17 +21,19 @@ const Sidebar = () => {
         </div>
         <nav className="mt-8 flex-1 space-y-1 px-2">
           {navigation.map((item) => (
-            <a
+            <Link
               key={item.name}
-              href={item.href}
+              to={item.href}
               className={cn(
                 "group flex items-center px-2 py-2 text-sm font-medium rounded-md transition-colors",
-                "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+                location.pathname === item.href
+                  ? "bg-gray-100 text-gray-900"
+                  : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
               )}
             >
               <item.icon className="mr-3 h-5 w-5" />
               {item.name}
-            </a>
+            </Link>
           ))}
         </nav>
       </div>
