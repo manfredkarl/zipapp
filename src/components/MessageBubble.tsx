@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { formatDistanceToNow } from "date-fns";
 import { cn } from "@/lib/utils";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface MessageBubbleProps {
   content: string;
@@ -13,27 +14,29 @@ interface MessageBubbleProps {
 
 const MessageBubble = ({ content, sender, timestamp, imageUrl, isSent = false }: MessageBubbleProps) => {
   const [imageLoaded, setImageLoaded] = useState(false);
+  const isMobile = useIsMobile();
 
   return (
     <div
       className={cn(
-        "flex w-full max-w-xs md:max-w-md lg:max-w-lg animate-slideIn",
+        "flex w-full animate-slideIn",
+        isMobile ? "max-w-[85%]" : "max-w-xs md:max-w-md lg:max-w-lg",
         isSent ? "ml-auto" : "mr-auto"
       )}
     >
       <div
         className={cn(
-          "rounded-lg px-4 py-2 max-w-full break-words",
+          "rounded-lg px-3 py-2 max-w-full break-words",
           isSent ? "bg-chat-sent" : "bg-chat-bubble"
         )}
       >
         <div className="flex items-center gap-2 mb-1">
-          <span className="font-medium text-sm">{sender}</span>
+          <span className="font-medium text-xs md:text-sm">{sender}</span>
           <span className="text-xs text-gray-500">
             {formatDistanceToNow(timestamp, { addSuffix: true })}
           </span>
         </div>
-        <p className="text-sm">{content}</p>
+        <p className="text-sm md:text-base">{content}</p>
         {imageUrl && (
           <div className="mt-2 relative">
             <img

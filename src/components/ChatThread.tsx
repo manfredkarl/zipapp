@@ -3,6 +3,7 @@ import { useState } from "react";
 import { ImageIcon, SendIcon } from "lucide-react";
 import MessageBubble from "./MessageBubble";
 import { Input } from "./ui/input";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface ChatMessage {
   id: string;
@@ -14,6 +15,7 @@ interface ChatMessage {
 }
 
 const ChatThread = () => {
+  const isMobile = useIsMobile();
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
@@ -58,7 +60,6 @@ const ChatThread = () => {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    // In a real app, you'd upload the file to a server here
     const imageUrl = URL.createObjectURL(file);
     const newMessage: ChatMessage = {
       id: Date.now().toString(),
@@ -74,7 +75,7 @@ const ChatThread = () => {
 
   return (
     <div className="flex flex-col h-full bg-white rounded-lg shadow-sm animate-fadeIn">
-      <div className="flex-1 overflow-y-auto p-4 space-y-4">
+      <div className="flex-1 overflow-y-auto p-2 md:p-4 space-y-4">
         {messages.map((msg) => (
           <MessageBubble
             key={msg.id}
@@ -86,7 +87,7 @@ const ChatThread = () => {
           />
         ))}
       </div>
-      <div className="border-t p-4">
+      <div className="border-t p-2 md:p-4">
         <form onSubmit={handleSubmit} className="flex items-center gap-2">
           <label className="cursor-pointer">
             <input
@@ -101,8 +102,8 @@ const ChatThread = () => {
             type="text"
             value={message}
             onChange={(e) => setMessage(e.target.value)}
-            placeholder="Type a message..."
-            className="flex-1 rounded-full bg-gray-100"
+            placeholder={isMobile ? "Message..." : "Type a message..."}
+            className="flex-1 rounded-full bg-gray-100 text-sm md:text-base"
           />
           <button
             type="submit"
