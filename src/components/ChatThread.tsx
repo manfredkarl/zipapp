@@ -1,9 +1,9 @@
-
 import { useState } from "react";
 import { ImageIcon, SendIcon } from "lucide-react";
 import MessageBubble from "./MessageBubble";
 import { Input } from "./ui/input";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { ScrollArea } from "./ui/scroll-area";
 
 interface ChatMessage {
   id: string;
@@ -74,19 +74,21 @@ const ChatThread = () => {
   };
 
   return (
-    <div className="flex flex-col h-full bg-white rounded-lg shadow-sm animate-fadeIn">
-      <div className="flex-1 overflow-y-auto p-2 md:p-4 space-y-4">
-        {messages.map((msg) => (
-          <MessageBubble
-            key={msg.id}
-            content={msg.content}
-            sender={msg.sender}
-            timestamp={msg.timestamp}
-            imageUrl={msg.imageUrl}
-            isSent={msg.isSent}
-          />
-        ))}
-      </div>
+    <div className="flex flex-col h-[calc(100vh-13rem)] bg-white rounded-lg shadow-sm animate-fadeIn">
+      <ScrollArea className="flex-1 p-2 md:p-4">
+        <div className="space-y-4">
+          {messages.map((msg) => (
+            <MessageBubble
+              key={msg.id}
+              content={msg.content}
+              sender={msg.sender}
+              timestamp={msg.timestamp}
+              imageUrl={msg.imageUrl}
+              isSent={msg.isSent}
+            />
+          ))}
+        </div>
+      </ScrollArea>
       <div className="border-t p-2 md:p-4">
         <form onSubmit={handleSubmit} className="flex items-center gap-2">
           <label className="cursor-pointer">
