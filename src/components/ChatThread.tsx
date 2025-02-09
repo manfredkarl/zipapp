@@ -130,8 +130,12 @@ const ChatThread = ({ projectId = "main" }: ChatThreadProps) => {
   };
 
   return (
-    <div className="flex flex-col h-full bg-white rounded-lg shadow-sm">
-      <ScrollArea ref={scrollAreaRef} className="flex-1 p-4">
+    <div className="flex flex-col h-full">
+      <ScrollArea 
+        ref={scrollAreaRef} 
+        className="flex-1 p-4 overflow-y-auto"
+        style={{ height: 'calc(100vh - 80px)' }}
+      >
         <div className="space-y-4">
           {messages.map((msg) => (
             <MessageBubble
@@ -145,7 +149,7 @@ const ChatThread = ({ projectId = "main" }: ChatThreadProps) => {
           ))}
         </div>
       </ScrollArea>
-      <div className="border-t p-4 bg-white">
+      <div className="sticky bottom-0 border-t p-4 bg-white shadow-lg">
         <form onSubmit={handleSubmit} className="flex items-center gap-2">
           <input
             type="file"
