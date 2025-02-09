@@ -17,7 +17,9 @@ const Index = () => {
           <div className="flex-1 flex flex-col mr-4">
             <div className="flex-1 flex flex-col mb-4">
               <h2 className="text-lg font-medium mb-4">Project Chat</h2>
-              <ChatThread />
+              <div className="flex-1">
+                <ChatThread />
+              </div>
             </div>
             <div>
               <h2 className="text-lg font-medium mb-4">Project Files</h2>

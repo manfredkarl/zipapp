@@ -1,7 +1,10 @@
-import { CalendarIcon, UsersIcon, ChevronRightIcon } from "lucide-react";
+
+import { CalendarIcon, UsersIcon, ChevronRightIcon, MessageSquareIcon } from "lucide-react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "./ui/tabs";
 import { Progress } from "./ui/progress";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "./ui/dialog";
+import { Button } from "./ui/button";
+import { useNavigate } from "react-router-dom";
 
 interface SubProject {
   id: string;
@@ -44,6 +47,8 @@ const subProjects: SubProject[] = [
 ];
 
 const ProjectHeader = ({ onProjectSelect }: ProjectHeaderProps) => {
+  const navigate = useNavigate();
+  
   // Calculate overall project progress
   const overallProgress = Math.round(
     subProjects.reduce((acc, project) => acc + project.progress, 0) / subProjects.length
@@ -53,6 +58,11 @@ const ProjectHeader = ({ onProjectSelect }: ProjectHeaderProps) => {
     if (onProjectSelect) {
       onProjectSelect(projectId);
     }
+  };
+
+  const handleChatClick = (projectId: string, event: React.MouseEvent) => {
+    event.stopPropagation();
+    navigate("/chats", { state: { projectId } });
   };
 
   return (
@@ -180,6 +190,13 @@ const ProjectHeader = ({ onProjectSelect }: ProjectHeaderProps) => {
                         <div className="space-y-2">
                           <Progress value={project.progress} className="h-2" />
                         </div>
+                        <Button 
+                          onClick={(e) => handleChatClick(project.id, e)}
+                          className="w-full flex items-center justify-center gap-2"
+                        >
+                          <MessageSquareIcon className="h-4 w-4" />
+                          Open Project Chat
+                        </Button>
                       </div>
                     </DialogContent>
                   </Dialog>
@@ -203,3 +220,4 @@ const ProjectHeader = ({ onProjectSelect }: ProjectHeaderProps) => {
 };
 
 export default ProjectHeader;
+

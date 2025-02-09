@@ -129,8 +129,8 @@ const ChatThread = ({ projectId = "main" }: ChatThreadProps) => {
   };
 
   return (
-    <div className="flex flex-col h-full bg-white rounded-lg shadow-sm animate-fadeIn">
-      <ScrollArea ref={scrollAreaRef} className="flex-1 p-2 md:p-4">
+    <div className="flex flex-col h-full bg-white rounded-lg shadow-sm">
+      <ScrollArea ref={scrollAreaRef} className="flex-1 p-4">
         <div className="space-y-4">
           {messages.map((msg) => (
             <MessageBubble
@@ -144,7 +144,7 @@ const ChatThread = ({ projectId = "main" }: ChatThreadProps) => {
           ))}
         </div>
       </ScrollArea>
-      <div className="border-t p-2 md:p-4">
+      <div className="border-t p-4">
         <form onSubmit={handleSubmit} className="flex items-center gap-2">
           <label className="cursor-pointer">
             <input
