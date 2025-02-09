@@ -1,4 +1,3 @@
-
 import { CalendarIcon, UsersIcon, ChevronRightIcon } from "lucide-react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "./ui/tabs";
 import { Progress } from "./ui/progress";
@@ -11,6 +10,10 @@ interface SubProject {
   startDate: string;
   teamSize: number;
   progress: number;
+}
+
+interface ProjectHeaderProps {
+  onProjectSelect?: (projectId: string) => void;
 }
 
 const subProjects: SubProject[] = [
@@ -40,11 +43,17 @@ const subProjects: SubProject[] = [
   }
 ];
 
-const ProjectHeader = () => {
+const ProjectHeader = ({ onProjectSelect }: ProjectHeaderProps) => {
   // Calculate overall project progress
   const overallProgress = Math.round(
     subProjects.reduce((acc, project) => acc + project.progress, 0) / subProjects.length
   );
+
+  const handleProjectClick = (projectId: string) => {
+    if (onProjectSelect) {
+      onProjectSelect(projectId);
+    }
+  };
 
   return (
     <div className="bg-white shadow animate-fadeIn">
@@ -97,7 +106,10 @@ const ProjectHeader = () => {
                 {subProjects.map((project) => (
                   <Dialog key={project.id}>
                     <DialogTrigger asChild>
-                      <div className="rounded-lg border p-4 hover:bg-gray-50 transition-colors cursor-pointer">
+                      <div 
+                        className="rounded-lg border p-4 hover:bg-gray-50 transition-colors cursor-pointer"
+                        onClick={() => handleProjectClick(project.id)}
+                      >
                         <div className="flex justify-between items-start mb-2">
                           <h3 className="font-medium">{project.name}</h3>
                           <span
@@ -191,4 +203,3 @@ const ProjectHeader = () => {
 };
 
 export default ProjectHeader;
-

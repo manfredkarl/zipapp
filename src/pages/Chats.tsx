@@ -10,6 +10,7 @@ import { cn } from "@/lib/utils";
 const Chats = () => {
   const isMobile = useIsMobile();
   const [showSidebar, setShowSidebar] = useState(!isMobile);
+  const [currentProject, setCurrentProject] = useState("main");
 
   return (
     <div className="flex h-screen bg-gray-50">
@@ -41,10 +42,10 @@ const Chats = () => {
           isMobile && showSidebar && "opacity-50"
         )}
       >
-        <ProjectHeader />
-        <div className="flex-1 p-4">
-          <h2 className="text-lg font-medium mb-4">Project Chat</h2>
-          <ChatThread />
+        {!isMobile && <ProjectHeader onProjectSelect={(id) => setCurrentProject(id)} />}
+        <div className="flex-1 p-4 flex flex-col">
+          {!isMobile && <h2 className="text-lg font-medium mb-4">Project Chat</h2>}
+          <ChatThread projectId={currentProject} />
         </div>
       </div>
 

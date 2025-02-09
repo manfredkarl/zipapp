@@ -1,4 +1,5 @@
-import { useState } from "react";
+
+import { useState, useEffect, useRef } from "react";
 import { ImageIcon, SendIcon } from "lucide-react";
 import MessageBubble from "./MessageBubble";
 import { Input } from "./ui/input";
@@ -12,17 +13,17 @@ interface ChatMessage {
   timestamp: Date;
   imageUrl?: string;
   isSent?: boolean;
+  projectId: string;
 }
 
-const ChatThread = () => {
-  const isMobile = useIsMobile();
-  const [message, setMessage] = useState("");
-  const [messages, setMessages] = useState<ChatMessage[]>([
+const projectMessages: Record<string, ChatMessage[]> = {
+  main: [
     {
       id: "1",
       content: "Started work on the foundation today.",
       sender: "John Doe",
       timestamp: new Date(Date.now() - 3600000),
+      projectId: "main"
     },
     {
       id: "2",
@@ -30,6 +31,7 @@ const ChatThread = () => {
       sender: "John Doe",
       timestamp: new Date(Date.now() - 3500000),
       imageUrl: "/placeholder.svg",
+      projectId: "main"
     },
     {
       id: "3",
@@ -37,8 +39,57 @@ const ChatThread = () => {
       sender: "Project Manager",
       timestamp: new Date(Date.now() - 1800000),
       isSent: true,
-    },
-  ]);
+      projectId: "main"
+    }
+  ],
+  "1": [
+    {
+      id: "4",
+      content: "Foundation work is progressing well.",
+      sender: "Team Lead",
+      timestamp: new Date(Date.now() - 7200000),
+      projectId: "1"
+    }
+  ],
+  "2": [
+    {
+      id: "5",
+      content: "Landscaping designs are ready for review.",
+      sender: "Design Team",
+      timestamp: new Date(Date.now() - 7200000),
+      projectId: "2"
+    }
+  ],
+  "3": [
+    {
+      id: "6",
+      content: "Fountain installation scheduled for next month.",
+      sender: "Project Coordinator",
+      timestamp: new Date(Date.now() - 7200000),
+      projectId: "3"
+    }
+  ]
+};
+
+interface ChatThreadProps {
+  projectId?: string;
+}
+
+const ChatThread = ({ projectId = "main" }: ChatThreadProps) => {
+  const isMobile = useIsMobile();
+  const [message, setMessage] = useState("");
+  const [messages, setMessages] = useState<ChatMessage[]>(projectMessages[projectId] || []);
+  const scrollAreaRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    setMessages(projectMessages[projectId] || []);
+  }, [projectId]);
+
+  useEffect(() => {
+    if (scrollAreaRef.current) {
+      scrollAreaRef.current.scrollTop = scrollAreaRef.current.scrollHeight;
+    }
+  }, [messages]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -50,9 +101,11 @@ const ChatThread = () => {
       sender: "Project Manager",
       timestamp: new Date(),
       isSent: true,
+      projectId
     };
 
     setMessages([...messages, newMessage]);
+    projectMessages[projectId] = [...(projectMessages[projectId] || []), newMessage];
     setMessage("");
   };
 
@@ -68,14 +121,16 @@ const ChatThread = () => {
       timestamp: new Date(),
       imageUrl,
       isSent: true,
+      projectId
     };
 
     setMessages([...messages, newMessage]);
+    projectMessages[projectId] = [...(projectMessages[projectId] || []), newMessage];
   };
 
   return (
-    <div className="flex flex-col h-[calc(100vh-13rem)] bg-white rounded-lg shadow-sm animate-fadeIn">
-      <ScrollArea className="flex-1 p-2 md:p-4">
+    <div className="flex flex-col h-full bg-white rounded-lg shadow-sm animate-fadeIn">
+      <ScrollArea ref={scrollAreaRef} className="flex-1 p-2 md:p-4">
         <div className="space-y-4">
           {messages.map((msg) => (
             <MessageBubble
