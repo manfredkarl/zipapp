@@ -3,24 +3,34 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import ChatThread from "@/components/ChatThread";
 import ProjectHeader from "@/components/ProjectHeader";
 import Sidebar from "@/components/Sidebar";
-import { MenuIcon } from "lucide-react";
+import { MenuIcon, ArrowLeft } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
+import { useNavigate } from "react-router-dom";
 
 const Chats = () => {
   const isMobile = useIsMobile();
   const [showSidebar, setShowSidebar] = useState(!isMobile);
   const [currentProject, setCurrentProject] = useState("main");
+  const navigate = useNavigate();
+
+  const handleBack = () => {
+    if (currentProject !== "main") {
+      setCurrentProject("main");
+    } else {
+      setShowSidebar(true);
+    }
+  };
 
   return (
     <div className="flex h-screen bg-gray-50">
-      {/* Mobile menu button */}
+      {/* Mobile back button */}
       {isMobile && (
         <button
-          onClick={() => setShowSidebar(!showSidebar)}
+          onClick={handleBack}
           className="fixed top-4 left-4 z-50 p-2 bg-white rounded-lg shadow-md"
         >
-          <MenuIcon className="h-5 w-5" />
+          <ArrowLeft className="h-5 w-5" />
         </button>
       )}
 

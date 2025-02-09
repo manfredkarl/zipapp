@@ -44,7 +44,7 @@ const projectMessages: Record<string, ChatMessage[]> = {
   ],
   "1": [
     {
-      id: "4",
+      id: "4", 
       content: "Foundation work is progressing well.",
       sender: "Team Lead",
       timestamp: new Date(Date.now() - 7200000),
@@ -55,7 +55,7 @@ const projectMessages: Record<string, ChatMessage[]> = {
     {
       id: "5",
       content: "Landscaping designs are ready for review.",
-      sender: "Design Team",
+      sender: "Design Team", 
       timestamp: new Date(Date.now() - 7200000),
       projectId: "2"
     }
@@ -66,7 +66,7 @@ const projectMessages: Record<string, ChatMessage[]> = {
       content: "Fountain installation scheduled for next month.",
       sender: "Project Coordinator",
       timestamp: new Date(Date.now() - 7200000),
-      projectId: "3"
+      projectId: "3" 
     }
   ]
 };
@@ -80,6 +80,7 @@ const ChatThread = ({ projectId = "main" }: ChatThreadProps) => {
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState<ChatMessage[]>(projectMessages[projectId] || []);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     setMessages(projectMessages[projectId] || []);
@@ -144,17 +145,22 @@ const ChatThread = ({ projectId = "main" }: ChatThreadProps) => {
           ))}
         </div>
       </ScrollArea>
-      <div className="border-t p-4">
+      <div className="border-t p-4 bg-white">
         <form onSubmit={handleSubmit} className="flex items-center gap-2">
-          <label className="cursor-pointer">
-            <input
-              type="file"
-              className="hidden"
-              accept="image/*"
-              onChange={handleFileUpload}
-            />
-            <ImageIcon className="h-5 w-5 text-gray-500 hover:text-gray-600 transition-colors" />
-          </label>
+          <input
+            type="file"
+            ref={fileInputRef}
+            className="hidden"
+            accept="image/*"
+            onChange={handleFileUpload}
+          />
+          <button
+            type="button"
+            onClick={() => fileInputRef.current?.click()}
+            className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+          >
+            <ImageIcon className="h-5 w-5 text-gray-500" />
+          </button>
           <Input
             type="text"
             value={message}
