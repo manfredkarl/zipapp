@@ -9,11 +9,13 @@ interface MessageBubbleProps {
   sender: string;
   timestamp: Date;
   imageUrl?: string;
+  videoUrl?: string;
   isSent?: boolean;
 }
 
-const MessageBubble = ({ content, sender, timestamp, imageUrl, isSent = false }: MessageBubbleProps) => {
+const MessageBubble = ({ content, sender, timestamp, imageUrl, videoUrl, isSent = false }: MessageBubbleProps) => {
   const [imageLoaded, setImageLoaded] = useState(false);
+  const [videoLoaded, setVideoLoaded] = useState(false);
   const isMobile = useIsMobile();
 
   return (
@@ -53,9 +55,23 @@ const MessageBubble = ({ content, sender, timestamp, imageUrl, isSent = false }:
             )}
           </div>
         )}
+        {videoUrl && (
+          <div className="mt-2">
+            <video
+              src={videoUrl}
+              controls
+              className={cn(
+                "rounded-md max-w-full transition-opacity duration-300",
+                videoLoaded ? "opacity-100" : "opacity-0"
+              )}
+              onLoadedData={() => setVideoLoaded(true)}
+            />
+          </div>
+        )}
       </div>
     </div>
   );
 };
 
 export default MessageBubble;
+
