@@ -130,13 +130,13 @@ const ChatThread = ({ projectId = "main" }: ChatThreadProps) => {
   };
 
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col h-full bg-gray-50">
       <ScrollArea 
         ref={scrollAreaRef} 
-        className="flex-1 p-4 overflow-y-auto"
-        style={{ height: 'calc(100vh - 80px)' }}
+        className="flex-1 p-4"
+        style={{ height: isMobile ? 'calc(100vh - 130px)' : 'calc(100vh - 180px)' }}
       >
-        <div className="space-y-4">
+        <div className="space-y-4 max-w-3xl mx-auto">
           {messages.map((msg) => (
             <MessageBubble
               key={msg.id}
@@ -150,7 +150,7 @@ const ChatThread = ({ projectId = "main" }: ChatThreadProps) => {
         </div>
       </ScrollArea>
       <div className="sticky bottom-0 border-t p-4 bg-white shadow-lg">
-        <form onSubmit={handleSubmit} className="flex items-center gap-2">
+        <form onSubmit={handleSubmit} className="flex items-center gap-2 max-w-3xl mx-auto">
           <input
             type="file"
             ref={fileInputRef}
