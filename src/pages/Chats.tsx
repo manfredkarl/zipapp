@@ -5,6 +5,9 @@ import { ArrowLeft } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { Link } from "react-router-dom";
+import { PieChart, Pie, Cell } from "recharts";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Slider } from "@/components/ui/slider";
 
 interface MainProject {
   name: string;
@@ -16,6 +19,7 @@ interface SubProject {
   name: string;
   type: 'sub';
   parentId: string;
+  progress: number;
 }
 
 type Project = MainProject | SubProject;
@@ -30,24 +34,31 @@ const chatList: Record<string, Project> = {
   "1": {
     name: "Plaza Foundation Renovation",
     type: "sub",
-    parentId: "main"
-  },
+    parentId: "main",
+    progress: 65
+  } as SubProject,
   "2": {
     name: "Landscaping & Gardens",
     type: "sub",
-    parentId: "main"
-  },
+    parentId: "main",
+    progress: 25
+  } as SubProject,
   "3": {
     name: "Fountain Installation",
     type: "sub",
-    parentId: "main"
-  }
+    parentId: "main",
+    progress: 10
+  } as SubProject
 };
+
+const COLORS = ['#0088FE', '#E7E7E7'];
 
 const Chats = () => {
   const isMobile = useIsMobile();
   const [currentView, setCurrentView] = useState<"list" | "chat">(isMobile ? "list" : "chat");
   const [currentProject, setCurrentProject] = useState("main");
+  const [isProgressDialogOpen, setIsProgressDialogOpen] = useState(false);
+  const [selectedProject, setSelectedProject] = useState<string | null>(null);
 
   const handleBack = () => {
     if (currentView === "chat") {
@@ -58,6 +69,58 @@ const Chats = () => {
   const handleProjectSelect = (projectId: string) => {
     setCurrentProject(projectId);
     setCurrentView("chat");
+  };
+
+  const handleProgressClick = (e: React.MouseEvent, projectId: string) => {
+    e.stopPropagation();
+    setSelectedProject(projectId);
+    setIsProgressDialogOpen(true);
+  };
+
+  const handleProgressChange = (value: number[]) => {
+    if (selectedProject && chatList[selectedProject].type === 'sub') {
+      (chatList[selectedProject] as SubProject).progress = value[0];
+    }
+  };
+
+  const renderProgressChart = (project: SubProject, size: number) => {
+    const data = [
+      { value: project.progress },
+      { value: 100 - project.progress }
+    ];
+
+    return (
+      <div 
+        className="cursor-pointer" 
+        onClick={(e) => handleProgressClick(e, project.type === 'sub' ? project.parentId : 'main')}
+      >
+        <PieChart width={size} height={size}>
+          <Pie
+            data={data}
+            innerRadius={size * 0.35}
+            outerRadius={size * 0.45}
+            startAngle={90}
+            endAngle={-270}
+            paddingAngle={0}
+            dataKey="value"
+          >
+            {data.map((_, index) => (
+              <Cell key={`cell-${index}`} fill={COLORS[index]} />
+            ))}
+          </Pie>
+        </PieChart>
+        <div 
+          className="absolute transform -translate-x-1/2 -translate-y-1/2" 
+          style={{ 
+            left: '50%', 
+            top: '50%',
+            fontSize: size * 0.25
+          }}
+        >
+          {project.progress}%
+        </div>
+      </div>
+    );
   };
 
   const renderChatList = () => {
@@ -80,18 +143,28 @@ const Chats = () => {
                   Main project chat
                 </div>
               </button>
-              {mainChat.subProjects?.map((subId) => (
-                <button
-                  key={subId}
-                  onClick={() => handleProjectSelect(subId)}
-                  className="w-full text-left p-4 pl-8 hover:bg-gray-50 transition-colors border-t bg-gray-50/50"
-                >
-                  <div className="font-medium">{chatList[subId].name}</div>
-                  <div className="text-sm text-gray-500">
-                    Sub-project chat
-                  </div>
-                </button>
-              ))}
+              {mainChat.subProjects?.map((subId) => {
+                const subProject = chatList[subId] as SubProject;
+                return (
+                  <button
+                    key={subId}
+                    onClick={() => handleProjectSelect(subId)}
+                    className="w-full text-left p-4 pl-8 hover:bg-gray-50 transition-colors border-t bg-gray-50/50"
+                  >
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <div className="font-medium">{subProject.name}</div>
+                        <div className="text-sm text-gray-500">
+                          Sub-project chat
+                        </div>
+                      </div>
+                      <div className="relative w-12 h-12">
+                        {renderProgressChart(subProject, 48)}
+                      </div>
+                    </div>
+                  </button>
+                );
+              })}
             </div>
           ))}
         </div>
@@ -124,6 +197,24 @@ const Chats = () => {
         ) : (
           renderChatList()
         )}
+
+        <Dialog open={isProgressDialogOpen} onOpenChange={setIsProgressDialogOpen}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Update Progress</DialogTitle>
+            </DialogHeader>
+            {selectedProject && (
+              <div className="py-4">
+                <Slider
+                  defaultValue={[(chatList[selectedProject] as SubProject).progress]}
+                  max={100}
+                  step={1}
+                  onValueChange={handleProgressChange}
+                />
+              </div>
+            )}
+          </DialogContent>
+        </Dialog>
       </div>
     );
   }
@@ -146,6 +237,24 @@ const Chats = () => {
           <ChatThread projectId={currentProject} />
         </div>
       </div>
+
+      <Dialog open={isProgressDialogOpen} onOpenChange={setIsProgressDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Update Progress</DialogTitle>
+          </DialogHeader>
+          {selectedProject && (
+            <div className="py-4">
+              <Slider
+                defaultValue={[(chatList[selectedProject] as SubProject).progress]}
+                max={100}
+                step={1}
+                onValueChange={handleProgressChange}
+              />
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
