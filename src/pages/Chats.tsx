@@ -6,13 +6,27 @@ import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { Link } from "react-router-dom";
 
+interface MainProject {
+  name: string;
+  type: 'main';
+  subProjects: string[];
+}
+
+interface SubProject {
+  name: string;
+  type: 'sub';
+  parentId: string;
+}
+
+type Project = MainProject | SubProject;
+
 // Mock data structure for chats
-const chatList = {
+const chatList: Record<string, Project> = {
   main: {
     name: "Downtown Plaza Renovation",
     type: "main",
     subProjects: ["1", "2", "3"]
-  },
+  } as MainProject,
   "1": {
     name: "Plaza Foundation Renovation",
     type: "sub",
@@ -47,8 +61,7 @@ const Chats = () => {
   };
 
   const renderChatList = () => {
-    // First, organize chats into main projects and their sub-projects
-    const mainProjects = Object.entries(chatList).filter(([_, chat]) => chat.type === "main");
+    const mainProjects = Object.entries(chatList).filter(([_, chat]) => chat.type === "main") as [string, MainProject][];
     
     return (
       <div className="flex flex-col h-full bg-white">
@@ -67,7 +80,6 @@ const Chats = () => {
                   Main project chat
                 </div>
               </button>
-              {/* Render sub-projects */}
               {mainChat.subProjects?.map((subId) => (
                 <button
                   key={subId}
@@ -94,10 +106,15 @@ const Chats = () => {
           <>
             <div className="fixed top-0 left-0 right-0 z-10 bg-primary text-white shadow-md">
               <div className="flex items-center p-4">
-                <button onClick={handleBack} className="p-1 -ml-2">
+                <button 
+                  onClick={handleBack} 
+                  className="p-2 -ml-2 hover:bg-primary-foreground/10 rounded-full transition-colors"
+                >
                   <ArrowLeft className="h-6 w-6" />
                 </button>
-                <span className="ml-2 font-medium">{chatList[currentProject]?.name}</span>
+                <span className="ml-2 font-medium truncate">
+                  {chatList[currentProject]?.name}
+                </span>
               </div>
             </div>
             <div className="h-full pt-16 pb-0">
@@ -121,7 +138,9 @@ const Chats = () => {
           <Link to="/" className="p-2 hover:bg-gray-100 rounded-full transition-colors">
             <ArrowLeft className="h-5 w-5 text-gray-600" />
           </Link>
-          <span className="ml-3 font-medium text-lg">{chatList[currentProject]?.name}</span>
+          <span className="ml-3 font-medium text-lg truncate">
+            {chatList[currentProject]?.name}
+          </span>
         </div>
         <div className="flex-1 overflow-hidden">
           <ChatThread projectId={currentProject} />
