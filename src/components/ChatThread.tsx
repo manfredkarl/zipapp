@@ -1,6 +1,5 @@
-
 import { useState, useEffect, useRef } from "react";
-import { ImageIcon, SendIcon } from "lucide-react";
+import { ImageIcon, SendIcon, VideoIcon } from "lucide-react";
 import MessageBubble from "./MessageBubble";
 import { Input } from "./ui/input";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -12,6 +11,7 @@ interface ChatMessage {
   sender: string;
   timestamp: Date;
   imageUrl?: string;
+  videoUrl?: string;
   isSent?: boolean;
   projectId: string;
 }
@@ -81,6 +81,7 @@ const ChatThread = ({ projectId = "main" }: ChatThreadProps) => {
   const [messages, setMessages] = useState<ChatMessage[]>(projectMessages[projectId] || []);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const videoInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     setMessages(projectMessages[projectId] || []);
@@ -129,6 +130,25 @@ const ChatThread = ({ projectId = "main" }: ChatThreadProps) => {
     projectMessages[projectId] = [...(projectMessages[projectId] || []), newMessage];
   };
 
+  const handleVideoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const videoUrl = URL.createObjectURL(file);
+    const newMessage: ChatMessage = {
+      id: Date.now().toString(),
+      content: "Uploaded a new video",
+      sender: "Project Manager",
+      timestamp: new Date(),
+      videoUrl,
+      isSent: true,
+      projectId
+    };
+
+    setMessages([...messages, newMessage]);
+    projectMessages[projectId] = [...(projectMessages[projectId] || []), newMessage];
+  };
+
   return (
     <div className="flex flex-col h-full bg-gray-50">
       <ScrollArea 
@@ -144,6 +164,7 @@ const ChatThread = ({ projectId = "main" }: ChatThreadProps) => {
               sender={msg.sender}
               timestamp={msg.timestamp}
               imageUrl={msg.imageUrl}
+              videoUrl={msg.videoUrl}
               isSent={msg.isSent}
             />
           ))}
@@ -158,12 +179,26 @@ const ChatThread = ({ projectId = "main" }: ChatThreadProps) => {
             accept="image/*"
             onChange={handleFileUpload}
           />
+          <input
+            type="file"
+            ref={videoInputRef}
+            className="hidden"
+            accept="video/*"
+            onChange={handleVideoUpload}
+          />
           <button
             type="button"
             onClick={() => fileInputRef.current?.click()}
             className="p-2 hover:bg-gray-100 rounded-full transition-colors"
           >
             <ImageIcon className="h-5 w-5 text-gray-500" />
+          </button>
+          <button
+            type="button"
+            onClick={() => videoInputRef.current?.click()}
+            className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+          >
+            <VideoIcon className="h-5 w-5 text-gray-500" />
           </button>
           <Input
             type="text"
