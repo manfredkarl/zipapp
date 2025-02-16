@@ -164,7 +164,7 @@ const ChatThread = ({ projectId = "main" }: ChatThreadProps) => {
           <Button
             variant="ghost"
             size="icon"
-            onClick={() => setSettingsDialogOpen(true)}
+            onClick={() => setIsSettingsDialogOpen(true)}
             className="text-gray-500 hover:text-gray-900"
           >
             <Settings className="h-5 w-5" />
