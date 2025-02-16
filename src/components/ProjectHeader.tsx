@@ -17,6 +17,7 @@ interface SubProject {
 
 interface ProjectHeaderProps {
   onProjectSelect?: (projectId: string) => void;
+  onTeamClick?: () => void;
 }
 
 const subProjects: SubProject[] = [
@@ -46,7 +47,7 @@ const subProjects: SubProject[] = [
   }
 ];
 
-const ProjectHeader = ({ onProjectSelect }: ProjectHeaderProps) => {
+const ProjectHeader = ({ onProjectSelect, onTeamClick }: ProjectHeaderProps) => {
   const navigate = useNavigate();
   
   // Calculate overall project progress
@@ -91,10 +92,14 @@ const ProjectHeader = ({ onProjectSelect }: ProjectHeaderProps) => {
               <CalendarIcon className="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-400" />
               Started January 10, 2024
             </div>
-            <div className="flex items-center text-sm text-gray-500">
+            <Button 
+              variant="ghost" 
+              className="flex items-center text-sm text-gray-500 hover:text-gray-900"
+              onClick={onTeamClick}
+            >
               <UsersIcon className="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-400" />
               12 team members
-            </div>
+            </Button>
           </div>
           <div className="space-y-1">
             <div className="flex justify-between text-sm">
@@ -220,4 +225,3 @@ const ProjectHeader = ({ onProjectSelect }: ProjectHeaderProps) => {
 };
 
 export default ProjectHeader;
-
