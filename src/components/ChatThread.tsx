@@ -1,9 +1,14 @@
+
 import { useState, useEffect, useRef } from "react";
-import { ImageIcon, SendIcon, VideoIcon } from "lucide-react";
+import { ImageIcon, SendIcon, VideoIcon, Settings, Users } from "lucide-react";
 import MessageBubble from "./MessageBubble";
 import { Input } from "./ui/input";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { ScrollArea } from "./ui/scroll-area";
+import { Button } from "./ui/button";
+import { ChatMembersDialog } from "./chat/ChatMembersDialog";
+import { UserSettingsDialog } from "./chat/UserSettingsDialog";
+import { chatList } from "./chat/types";
 
 interface ChatMessage {
   id: string;
@@ -79,6 +84,8 @@ const ChatThread = ({ projectId = "main" }: ChatThreadProps) => {
   const isMobile = useIsMobile();
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState<ChatMessage[]>(projectMessages[projectId] || []);
+  const [isMembersDialogOpen, setIsMembersDialogOpen] = useState(false);
+  const [isSettingsDialogOpen, setIsSettingsDialogOpen] = useState(false);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const videoInputRef = useRef<HTMLInputElement>(null);
@@ -151,6 +158,28 @@ const ChatThread = ({ projectId = "main" }: ChatThreadProps) => {
 
   return (
     <div className="flex flex-col h-full bg-gray-50">
+      <div className="bg-white border-b p-4 flex items-center justify-between">
+        <h2 className="font-medium">{chatList[projectId]?.name}</h2>
+        <div className="flex items-center gap-2">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => setSettingsDialogOpen(true)}
+            className="text-gray-500 hover:text-gray-900"
+          >
+            <Settings className="h-5 w-5" />
+          </Button>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => setIsMembersDialogOpen(true)}
+            className="text-gray-500 hover:text-gray-900"
+          >
+            <Users className="h-5 w-5" />
+          </Button>
+        </div>
+      </div>
+      
       <ScrollArea 
         ref={scrollAreaRef} 
         className="flex-1 p-4"
@@ -170,6 +199,7 @@ const ChatThread = ({ projectId = "main" }: ChatThreadProps) => {
           ))}
         </div>
       </ScrollArea>
+
       <div className="sticky bottom-0 border-t p-4 bg-white shadow-lg">
         <form onSubmit={handleSubmit} className="flex items-center gap-2 max-w-3xl mx-auto">
           <input
@@ -215,6 +245,17 @@ const ChatThread = ({ projectId = "main" }: ChatThreadProps) => {
           </button>
         </form>
       </div>
+
+      <ChatMembersDialog 
+        isOpen={isMembersDialogOpen}
+        onOpenChange={setIsMembersDialogOpen}
+        chatName={chatList[projectId]?.name || "Chat"}
+      />
+
+      <UserSettingsDialog
+        isOpen={isSettingsDialogOpen}
+        onOpenChange={setIsSettingsDialogOpen}
+      />
     </div>
   );
 };
