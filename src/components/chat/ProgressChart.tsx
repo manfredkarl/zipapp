@@ -46,4 +46,3 @@ export const ProgressChart = ({ project, size, onClick }: ProgressChartProps) =>
     </div>
   );
 };
-

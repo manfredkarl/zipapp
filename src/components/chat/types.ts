@@ -41,4 +41,3 @@ export const chatList: Record<string, Project> = {
     progress: 10
   } as SubProject
 };
-
