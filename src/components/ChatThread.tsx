@@ -1,12 +1,8 @@
-
 import { useState } from "react";
 import { chatList } from "./chat/types";
 import { ChatHeader } from "./chat/ChatHeader";
 import { ChatMessageArea } from "./chat/ChatMessageArea";
 import { ChatInputArea } from "./chat/ChatInputArea";
-import { ChatMembersDialog } from "./chat/ChatMembersDialog";
-import { UserSettingsDialog } from "./chat/UserSettingsDialog";
-import { ChatInfo } from "./chat/ChatInfo";
 import { useChatMessages } from "@/hooks/use-chat-messages";
 
 interface ChatThreadProps {
@@ -14,9 +10,10 @@ interface ChatThreadProps {
 }
 
 const ChatThread = ({ projectId = "main" }: ChatThreadProps) => {
-  const [isMembersDialogOpen, setIsMembersDialogOpen] = useState(false);
-  const [isSettingsDialogOpen, setIsSettingsDialogOpen] = useState(false);
-  const [isChatInfoOpen, setIsChatInfoOpen] = useState(false);
+  const handleInfoClick = () => {};
+  const handleSettingsClick = () => {};
+  const handleMembersClick = () => {};
+  
   const { messages, addTextMessage, addImageMessage, addVideoMessage } = useChatMessages(projectId);
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -35,9 +32,9 @@ const ChatThread = ({ projectId = "main" }: ChatThreadProps) => {
     <div className="flex flex-col h-full bg-gray-50">
       <ChatHeader 
         projectId={projectId}
-        onInfoClick={() => setIsChatInfoOpen(true)}
-        onSettingsClick={() => setIsSettingsDialogOpen(true)}
-        onMembersClick={() => setIsMembersDialogOpen(true)}
+        onInfoClick={handleInfoClick}
+        onSettingsClick={handleSettingsClick}
+        onMembersClick={handleMembersClick}
       />
       
       <ChatMessageArea messages={messages} />
@@ -46,23 +43,6 @@ const ChatThread = ({ projectId = "main" }: ChatThreadProps) => {
         onSendMessage={addTextMessage}
         onImageUpload={handleFileUpload}
         onVideoUpload={handleVideoUpload}
-      />
-
-      <ChatMembersDialog 
-        isOpen={isMembersDialogOpen}
-        onOpenChange={setIsMembersDialogOpen}
-        chatName={chatList[projectId]?.name || "Chat"}
-      />
-
-      <UserSettingsDialog
-        isOpen={isSettingsDialogOpen}
-        onOpenChange={setIsSettingsDialogOpen}
-      />
-
-      <ChatInfo
-        isOpen={isChatInfoOpen}
-        onOpenChange={setIsChatInfoOpen}
-        project={chatList[projectId]}
       />
     </div>
   );
