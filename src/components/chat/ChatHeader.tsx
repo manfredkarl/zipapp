@@ -16,13 +16,15 @@ export const ChatHeader = ({
   onSettingsClick,
   onMembersClick
 }: ChatHeaderProps) => {
+  const project = chatList[projectId];
+  
   return (
     <div className="bg-white border-b p-4 flex items-center justify-between">
       <div 
-        className="flex items-center flex-1 cursor-pointer"
+        className="flex items-center flex-1 cursor-pointer hover:bg-gray-50 p-2 rounded-md transition-colors"
         onClick={onInfoClick}
       >
-        <h2 className="font-medium">{chatList[projectId]?.name}</h2>
+        <h2 className="font-medium">{project?.name}</h2>
       </div>
       <div className="flex items-center gap-2">
         <Button
