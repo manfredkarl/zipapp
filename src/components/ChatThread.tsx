@@ -1,6 +1,6 @@
 
 import { useState, useEffect, useRef } from "react";
-import { ImageIcon, SendIcon, VideoIcon, Settings, Users } from "lucide-react";
+import { ImageIcon, SendIcon, VideoIcon, Settings, Users, Info } from "lucide-react";
 import MessageBubble from "./MessageBubble";
 import { Input } from "./ui/input";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -9,6 +9,7 @@ import { Button } from "./ui/button";
 import { ChatMembersDialog } from "./chat/ChatMembersDialog";
 import { UserSettingsDialog } from "./chat/UserSettingsDialog";
 import { chatList } from "./chat/types";
+import { ChatInfo } from "./chat/ChatInfo";
 
 interface ChatMessage {
   id: string;
@@ -86,6 +87,7 @@ const ChatThread = ({ projectId = "main" }: ChatThreadProps) => {
   const [messages, setMessages] = useState<ChatMessage[]>(projectMessages[projectId] || []);
   const [isMembersDialogOpen, setIsMembersDialogOpen] = useState(false);
   const [isSettingsDialogOpen, setIsSettingsDialogOpen] = useState(false);
+  const [isChatInfoOpen, setIsChatInfoOpen] = useState(false);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const videoInputRef = useRef<HTMLInputElement>(null);
@@ -159,7 +161,12 @@ const ChatThread = ({ projectId = "main" }: ChatThreadProps) => {
   return (
     <div className="flex flex-col h-full bg-gray-50">
       <div className="bg-white border-b p-4 flex items-center justify-between">
-        <h2 className="font-medium">{chatList[projectId]?.name}</h2>
+        <div 
+          className="flex items-center flex-1 cursor-pointer"
+          onClick={() => setIsChatInfoOpen(true)}
+        >
+          <h2 className="font-medium">{chatList[projectId]?.name}</h2>
+        </div>
         <div className="flex items-center gap-2">
           <Button
             variant="ghost"
@@ -176,6 +183,14 @@ const ChatThread = ({ projectId = "main" }: ChatThreadProps) => {
             className="text-gray-500 hover:text-gray-900"
           >
             <Users className="h-5 w-5" />
+          </Button>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => setIsChatInfoOpen(true)}
+            className="text-gray-500 hover:text-gray-900"
+          >
+            <Info className="h-5 w-5" />
           </Button>
         </div>
       </div>
@@ -255,6 +270,12 @@ const ChatThread = ({ projectId = "main" }: ChatThreadProps) => {
       <UserSettingsDialog
         isOpen={isSettingsDialogOpen}
         onOpenChange={setIsSettingsDialogOpen}
+      />
+
+      <ChatInfo
+        isOpen={isChatInfoOpen}
+        onOpenChange={setIsChatInfoOpen}
+        project={chatList[projectId]}
       />
     </div>
   );
