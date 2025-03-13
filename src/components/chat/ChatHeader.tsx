@@ -1,11 +1,11 @@
 
 import { useState } from "react";
-import { Button } from "../ui/button";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "../ui/collapsible";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { ImageIcon, Users } from "lucide-react";
 import { chatList } from "./types";
 import { Card } from "../ui/card";
+import { Button } from "../ui/button";
 
 interface ChatHeaderProps {
   projectId: string;
