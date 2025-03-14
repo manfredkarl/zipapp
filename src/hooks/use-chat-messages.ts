@@ -8,6 +8,8 @@ interface ChatMessage {
   timestamp: Date;
   imageUrl?: string;
   videoUrl?: string;
+  documentUrl?: string;
+  documentName?: string;
   isSent?: boolean;
   projectId: string;
 }
@@ -35,6 +37,16 @@ const projectMessages: Record<string, ChatMessage[]> = {
       content: "Looks good! Keep up the great work.",
       sender: "Project Manager",
       timestamp: new Date(Date.now() - 1800000),
+      isSent: true,
+      projectId: "main"
+    },
+    {
+      id: "4",
+      content: "I've attached the updated project timeline.",
+      sender: "Project Manager",
+      timestamp: new Date(Date.now() - 900000),
+      documentUrl: "#",
+      documentName: "Project_Timeline.pdf",
       isSent: true,
       projectId: "main"
     }
@@ -98,7 +110,7 @@ export const useChatMessages = (projectId: string = "main") => {
   const addImageMessage = (file: File) => {
     const imageUrl = URL.createObjectURL(file);
     addMessage({
-      content: "Uploaded a new image",
+      content: `Sent an image: ${file.name}`,
       sender: "Project Manager",
       imageUrl,
       isSent: true,
@@ -109,9 +121,21 @@ export const useChatMessages = (projectId: string = "main") => {
   const addVideoMessage = (file: File) => {
     const videoUrl = URL.createObjectURL(file);
     addMessage({
-      content: "Uploaded a new video",
+      content: `Sent a video: ${file.name}`,
       sender: "Project Manager",
       videoUrl,
+      isSent: true,
+      projectId
+    });
+  };
+
+  const addDocumentMessage = (file: File) => {
+    const documentUrl = URL.createObjectURL(file);
+    addMessage({
+      content: `Sent a document`,
+      sender: "Project Manager",
+      documentUrl,
+      documentName: file.name,
       isSent: true,
       projectId
     });
@@ -121,6 +145,7 @@ export const useChatMessages = (projectId: string = "main") => {
     messages,
     addTextMessage,
     addImageMessage,
-    addVideoMessage
+    addVideoMessage,
+    addDocumentMessage
   };
 };

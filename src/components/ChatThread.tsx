@@ -10,39 +10,31 @@ interface ChatThreadProps {
 }
 
 const ChatThread = ({ projectId = "main" }: ChatThreadProps) => {
-  const handleInfoClick = () => {};
-  const handleSettingsClick = () => {};
-  const handleMembersClick = () => {};
-  
-  const { messages, addTextMessage, addImageMessage, addVideoMessage } = useChatMessages(projectId);
+  const { messages, addTextMessage, addImageMessage, addVideoMessage, addDocumentMessage } = useChatMessages(projectId);
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
-    addImageMessage(file);
-  };
-
-  const handleVideoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    addVideoMessage(file);
+    
+    const fileType = file.type.split('/')[0];
+    if (fileType === 'image') {
+      addImageMessage(file);
+    } else if (fileType === 'video') {
+      addVideoMessage(file);
+    } else {
+      addDocumentMessage(file);
+    }
   };
 
   return (
     <div className="flex flex-col h-full bg-gray-50">
-      <ChatHeader 
-        projectId={projectId}
-        onInfoClick={handleInfoClick}
-        onSettingsClick={handleSettingsClick}
-        onMembersClick={handleMembersClick}
-      />
+      <ChatHeader projectId={projectId} />
       
       <ChatMessageArea messages={messages} />
 
       <ChatInputArea 
         onSendMessage={addTextMessage}
-        onImageUpload={handleFileUpload}
-        onVideoUpload={handleVideoUpload}
+        onFileUpload={handleFileUpload}
       />
     </div>
   );

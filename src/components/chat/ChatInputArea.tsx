@@ -1,24 +1,22 @@
 
 import { useState, useRef } from "react";
-import { ImageIcon, SendIcon, VideoIcon } from "lucide-react";
+import { ImageIcon, SendIcon, VideoIcon, Paperclip, Mic, Smile } from "lucide-react";
 import { Input } from "../ui/input";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 
 interface ChatInputAreaProps {
   onSendMessage: (content: string) => void;
-  onImageUpload: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  onVideoUpload: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onFileUpload: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 export const ChatInputArea = ({ 
   onSendMessage, 
-  onImageUpload, 
-  onVideoUpload 
+  onFileUpload
 }: ChatInputAreaProps) => {
   const [message, setMessage] = useState("");
   const isMobile = useIsMobile();
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const videoInputRef = useRef<HTMLInputElement>(null);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -35,30 +33,35 @@ export const ChatInputArea = ({
           type="file"
           ref={fileInputRef}
           className="hidden"
-          accept="image/*"
-          onChange={onImageUpload}
+          accept="image/*,video/*,application/pdf,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+          onChange={onFileUpload}
         />
-        <input
-          type="file"
-          ref={videoInputRef}
-          className="hidden"
-          accept="video/*"
-          onChange={onVideoUpload}
-        />
-        <button
-          type="button"
-          onClick={() => fileInputRef.current?.click()}
-          className="p-2 hover:bg-gray-100 rounded-full transition-colors"
-        >
-          <ImageIcon className="h-5 w-5 text-gray-500" />
-        </button>
-        <button
-          type="button"
-          onClick={() => videoInputRef.current?.click()}
-          className="p-2 hover:bg-gray-100 rounded-full transition-colors"
-        >
-          <VideoIcon className="h-5 w-5 text-gray-500" />
-        </button>
+        
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <button
+              type="button"
+              className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+            >
+              <Smile className="h-5 w-5 text-gray-500" />
+            </button>
+          </TooltipTrigger>
+          <TooltipContent>Emoji</TooltipContent>
+        </Tooltip>
+        
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <button
+              type="button"
+              onClick={() => fileInputRef.current?.click()}
+              className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+            >
+              <Paperclip className="h-5 w-5 text-gray-500" />
+            </button>
+          </TooltipTrigger>
+          <TooltipContent>Attach files</TooltipContent>
+        </Tooltip>
+        
         <Input
           type="text"
           value={message}
@@ -66,12 +69,27 @@ export const ChatInputArea = ({
           placeholder={isMobile ? "Message..." : "Type a message..."}
           className="flex-1 rounded-full bg-gray-100 text-sm md:text-base"
         />
-        <button
-          type="submit"
-          className="rounded-full bg-primary p-2 text-white hover:bg-primary/90 transition-colors"
-        >
-          <SendIcon className="h-5 w-5" />
-        </button>
+        
+        {!message.trim() ? (
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <button
+                type="button"
+                className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+              >
+                <Mic className="h-5 w-5 text-gray-500" />
+              </button>
+            </TooltipTrigger>
+            <TooltipContent>Voice message</TooltipContent>
+          </Tooltip>
+        ) : (
+          <button
+            type="submit"
+            className="rounded-full bg-primary p-2 text-white hover:bg-primary/90 transition-colors"
+          >
+            <SendIcon className="h-5 w-5" />
+          </button>
+        )}
       </form>
     </div>
   );
