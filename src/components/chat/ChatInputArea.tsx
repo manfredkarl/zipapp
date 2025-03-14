@@ -29,7 +29,7 @@ export const ChatInputArea = ({
   };
 
   return (
-    <div className="sticky bottom-0 border-t p-4 bg-white shadow-lg">
+    <div className="sticky bottom-0 border-t p-4 bg-white shadow-lg w-full z-10">
       <form onSubmit={handleSubmit} className="flex items-center gap-2 max-w-3xl mx-auto">
         {/* Hidden file inputs */}
         <input
@@ -54,58 +54,54 @@ export const ChatInputArea = ({
           onChange={onFileUpload}
         />
         
+        {/* Always show image and video buttons on mobile */}
+        <button
+          type="button"
+          onClick={() => imageInputRef.current?.click()}
+          className="p-2 hover:bg-gray-100 rounded-full transition-colors text-gray-500"
+          aria-label="Add image"
+        >
+          <ImageIcon className="h-5 w-5" />
+        </button>
+        
+        <button
+          type="button"
+          onClick={() => videoInputRef.current?.click()}
+          className="p-2 hover:bg-gray-100 rounded-full transition-colors text-gray-500"
+          aria-label="Add video"
+        >
+          <VideoIcon className="h-5 w-5" />
+        </button>
+        
+        {/* On mobile, only show paperclip icon */}
         {!isMobile && (
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <button
-                type="button"
-                className="p-2 hover:bg-gray-100 rounded-full transition-colors"
-              >
-                <Smile className="h-5 w-5 text-gray-500" />
-              </button>
-            </TooltipTrigger>
-            <TooltipContent>Emoji</TooltipContent>
-          </Tooltip>
+          <>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button
+                  type="button"
+                  className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+                >
+                  <Smile className="h-5 w-5 text-gray-500" />
+                </button>
+              </TooltipTrigger>
+              <TooltipContent>Emoji</TooltipContent>
+            </Tooltip>
+            
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button
+                  type="button"
+                  onClick={() => fileInputRef.current?.click()}
+                  className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+                >
+                  <Paperclip className="h-5 w-5 text-gray-500" />
+                </button>
+              </TooltipTrigger>
+              <TooltipContent>Attach files</TooltipContent>
+            </Tooltip>
+          </>
         )}
-        
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <button
-              type="button"
-              onClick={() => imageInputRef.current?.click()}
-              className="p-2 hover:bg-gray-100 rounded-full transition-colors"
-            >
-              <ImageIcon className="h-5 w-5 text-gray-500" />
-            </button>
-          </TooltipTrigger>
-          <TooltipContent>Add Image</TooltipContent>
-        </Tooltip>
-        
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <button
-              type="button"
-              onClick={() => videoInputRef.current?.click()}
-              className="p-2 hover:bg-gray-100 rounded-full transition-colors"
-            >
-              <VideoIcon className="h-5 w-5 text-gray-500" />
-            </button>
-          </TooltipTrigger>
-          <TooltipContent>Add Video</TooltipContent>
-        </Tooltip>
-        
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <button
-              type="button"
-              onClick={() => fileInputRef.current?.click()}
-              className="p-2 hover:bg-gray-100 rounded-full transition-colors"
-            >
-              <Paperclip className="h-5 w-5 text-gray-500" />
-            </button>
-          </TooltipTrigger>
-          <TooltipContent>Attach files</TooltipContent>
-        </Tooltip>
         
         <Input
           type="text"
@@ -116,21 +112,18 @@ export const ChatInputArea = ({
         />
         
         {!message.trim() ? (
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <button
-                type="button"
-                className="p-2 hover:bg-gray-100 rounded-full transition-colors"
-              >
-                <Mic className="h-5 w-5 text-gray-500" />
-              </button>
-            </TooltipTrigger>
-            <TooltipContent>Voice message</TooltipContent>
-          </Tooltip>
+          <button
+            type="button"
+            className="p-2 hover:bg-gray-100 rounded-full transition-colors text-gray-500"
+            aria-label="Voice message"
+          >
+            <Mic className="h-5 w-5" />
+          </button>
         ) : (
           <button
             type="submit"
             className="rounded-full bg-primary p-2 text-white hover:bg-primary/90 transition-colors"
+            aria-label="Send message"
           >
             <SendIcon className="h-5 w-5" />
           </button>

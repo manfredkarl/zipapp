@@ -1,8 +1,7 @@
-
 import { useIsMobile } from "@/hooks/use-mobile";
 import ChatThread from "@/components/ChatThread";
 import { ArrowLeft } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { chatList } from "@/components/chat/types";
 import { ChatList } from "@/components/chat/ChatList";
@@ -15,6 +14,12 @@ const Chats = () => {
   const [isProgressDialogOpen, setIsProgressDialogOpen] = useState(false);
   const [selectedProject, setSelectedProject] = useState<string | null>(null);
   const [expandedProjects, setExpandedProjects] = useState<Record<string, boolean>>({});
+
+  useEffect(() => {
+    if (!isMobile) {
+      setCurrentView("chat");
+    }
+  }, [isMobile]);
 
   const handleBack = () => {
     if (currentView === "chat") {

@@ -19,6 +19,12 @@ export const ChatList = ({
 }: ChatListProps) => {
   const mainProjects = Object.entries(chatList).filter(([_, chat]) => chat.type === "main") as [string, MainProject][];
 
+  // Helper function to handle project expansion
+  const handleProjectClick = (e: React.MouseEvent, projectId: string) => {
+    onProjectSelect(projectId);
+    onProjectExpand(projectId);
+  };
+
   return (
     <div className="flex flex-col h-full bg-white">
       <div className="p-4 bg-primary text-white shadow-md">
@@ -28,10 +34,7 @@ export const ChatList = ({
         {mainProjects.map(([mainId, mainChat]) => (
           <div key={mainId} className="border-b">
             <div
-              onClick={() => {
-                onProjectSelect(mainId);
-                onProjectExpand(mainId);
-              }}
+              onClick={(e) => handleProjectClick(e, mainId)}
               className="w-full text-left p-4 hover:bg-gray-50 transition-colors flex items-center justify-between cursor-pointer"
             >
               <div>
@@ -51,12 +54,20 @@ export const ChatList = ({
                     }}
                   />
                 </div>
-                <ChevronDown
-                  className={cn(
-                    "h-4 w-4 transition-transform duration-200",
-                    expandedProjects[mainId] ? "transform rotate-180" : ""
-                  )}
-                />
+                <button 
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onProjectExpand(mainId);
+                  }}
+                  className="focus:outline-none"
+                >
+                  <ChevronDown
+                    className={cn(
+                      "h-4 w-4 transition-transform duration-200",
+                      expandedProjects[mainId] ? "transform rotate-180" : ""
+                    )}
+                  />
+                </button>
               </div>
             </div>
             
