@@ -7,7 +7,7 @@ import {
   File, 
   CheckCircle2, 
   Clock, 
-  Tool, 
+  Wrench, 
   FileText, 
   Briefcase, 
   BarChart, 
@@ -56,7 +56,7 @@ const MessageBubble = ({
   documentUrl,
   documentName,
   isSent = false,
-  messageType,
+  messageType = "text", // Add default value
   service,
   offer,
   order,
@@ -75,7 +75,7 @@ const MessageBubble = ({
         return service ? (
           <div className="mt-2 p-3 bg-white rounded-md border border-gray-200 shadow-sm">
             <div className="flex items-center mb-2">
-              <Tool className="h-5 w-5 text-primary mr-2" />
+              <Wrench className="h-5 w-5 text-primary mr-2" />
               <h4 className="font-medium">Service Offering</h4>
             </div>
             <h5 className="font-semibold text-lg">{service.name}</h5>

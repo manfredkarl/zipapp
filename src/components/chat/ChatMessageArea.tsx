@@ -3,6 +3,7 @@ import { useRef, useEffect } from "react";
 import { ScrollArea } from "../ui/scroll-area";
 import MessageBubble from "../MessageBubble";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { MessageType } from "@/hooks/use-chat-messages";
 
 interface ChatMessage {
   id: string;
@@ -11,8 +12,18 @@ interface ChatMessage {
   timestamp: Date;
   imageUrl?: string;
   videoUrl?: string;
+  documentUrl?: string;
+  documentName?: string;
   isSent?: boolean;
   projectId: string;
+  messageType: MessageType;
+  service?: any;
+  offer?: any;
+  order?: any;
+  progress?: any;
+  invoice?: any;
+  payment?: any;
+  closing?: any;
 }
 
 interface ChatMessageAreaProps {
@@ -44,7 +55,17 @@ export const ChatMessageArea = ({ messages }: ChatMessageAreaProps) => {
             timestamp={msg.timestamp}
             imageUrl={msg.imageUrl}
             videoUrl={msg.videoUrl}
+            documentUrl={msg.documentUrl}
+            documentName={msg.documentName}
             isSent={msg.isSent}
+            messageType={msg.messageType}
+            service={msg.service}
+            offer={msg.offer}
+            order={msg.order}
+            progress={msg.progress}
+            invoice={msg.invoice}
+            payment={msg.payment}
+            closing={msg.closing}
           />
         ))}
       </div>
