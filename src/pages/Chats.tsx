@@ -24,7 +24,9 @@ const Chats = () => {
 
   const handleProjectSelect = (projectId: string) => {
     setCurrentProject(projectId);
-    setCurrentView("chat");
+    if (isMobile) {
+      setCurrentView("chat");
+    }
   };
 
   const handleProgressClick = (e: React.MouseEvent, projectId: string) => {
@@ -48,7 +50,7 @@ const Chats = () => {
 
   if (isMobile) {
     return (
-      <div className="h-screen bg-gray-50">
+      <div className="h-screen bg-gray-50 flex flex-col">
         {currentView === "chat" ? (
           <>
             <div className="fixed top-0 left-0 right-0 z-10 bg-primary text-white shadow-md">
@@ -64,7 +66,7 @@ const Chats = () => {
                 </span>
               </div>
             </div>
-            <div className="h-full pt-16 pb-0">
+            <div className="flex-1 pt-16 pb-0 flex flex-col">
               <ChatThread projectId={currentProject} />
             </div>
           </>

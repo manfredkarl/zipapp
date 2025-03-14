@@ -17,6 +17,8 @@ export const ChatInputArea = ({
   const [message, setMessage] = useState("");
   const isMobile = useIsMobile();
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const imageInputRef = useRef<HTMLInputElement>(null);
+  const videoInputRef = useRef<HTMLInputElement>(null);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -29,24 +31,67 @@ export const ChatInputArea = ({
   return (
     <div className="sticky bottom-0 border-t p-4 bg-white shadow-lg">
       <form onSubmit={handleSubmit} className="flex items-center gap-2 max-w-3xl mx-auto">
+        {/* Hidden file inputs */}
         <input
           type="file"
           ref={fileInputRef}
           className="hidden"
-          accept="image/*,video/*,application/pdf,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+          accept="application/pdf,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
           onChange={onFileUpload}
         />
+        <input
+          type="file"
+          ref={imageInputRef}
+          className="hidden"
+          accept="image/*"
+          onChange={onFileUpload}
+        />
+        <input
+          type="file"
+          ref={videoInputRef}
+          className="hidden"
+          accept="video/*"
+          onChange={onFileUpload}
+        />
+        
+        {!isMobile && (
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <button
+                type="button"
+                className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+              >
+                <Smile className="h-5 w-5 text-gray-500" />
+              </button>
+            </TooltipTrigger>
+            <TooltipContent>Emoji</TooltipContent>
+          </Tooltip>
+        )}
         
         <Tooltip>
           <TooltipTrigger asChild>
             <button
               type="button"
+              onClick={() => imageInputRef.current?.click()}
               className="p-2 hover:bg-gray-100 rounded-full transition-colors"
             >
-              <Smile className="h-5 w-5 text-gray-500" />
+              <ImageIcon className="h-5 w-5 text-gray-500" />
             </button>
           </TooltipTrigger>
-          <TooltipContent>Emoji</TooltipContent>
+          <TooltipContent>Add Image</TooltipContent>
+        </Tooltip>
+        
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <button
+              type="button"
+              onClick={() => videoInputRef.current?.click()}
+              className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+            >
+              <VideoIcon className="h-5 w-5 text-gray-500" />
+            </button>
+          </TooltipTrigger>
+          <TooltipContent>Add Video</TooltipContent>
         </Tooltip>
         
         <Tooltip>

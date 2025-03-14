@@ -44,9 +44,13 @@ export const ChatMessageArea = ({ messages }: ChatMessageAreaProps) => {
     <ScrollArea 
       ref={scrollAreaRef} 
       className="flex-1 p-4"
-      style={{ height: isMobile ? 'calc(100vh - 130px)' : 'calc(100vh - 180px)' }}
+      style={{ 
+        height: isMobile 
+          ? 'calc(100vh - 180px)' // Adjusted height for mobile to account for input area
+          : 'calc(100vh - 180px)' 
+      }}
     >
-      <div className="space-y-4 max-w-3xl mx-auto">
+      <div className="space-y-4 max-w-3xl mx-auto pb-4">
         {messages.map((msg) => (
           <MessageBubble
             key={msg.id}
