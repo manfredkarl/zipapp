@@ -40,14 +40,13 @@ export const ChatMessageArea = ({ messages }: ChatMessageAreaProps) => {
     }
   }, [messages]);
 
-  // The key fix here is proper height calculation for mobile
   return (
     <ScrollArea 
       ref={scrollAreaRef} 
       className="flex-1 p-4"
       style={{ 
         height: isMobile 
-          ? 'calc(100vh - 220px)' // Adjusted height for mobile to account for bottom input area
+          ? 'calc(100vh - 240px)' // Adjusted height for mobile to account for bottom input and action button
           : 'calc(100vh - 180px)' 
       }}
     >

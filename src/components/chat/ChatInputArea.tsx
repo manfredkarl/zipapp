@@ -54,7 +54,7 @@ export const ChatInputArea = ({
           onChange={onFileUpload}
         />
         
-        {/* Always show image and video buttons on mobile */}
+        {/* Always show image and video buttons */}
         <button
           type="button"
           onClick={() => imageInputRef.current?.click()}
@@ -73,7 +73,7 @@ export const ChatInputArea = ({
           <VideoIcon className="h-5 w-5" />
         </button>
         
-        {/* On mobile, only show paperclip icon */}
+        {/* On desktop, add more buttons */}
         {!isMobile && (
           <>
             <Tooltip>
@@ -87,21 +87,18 @@ export const ChatInputArea = ({
               </TooltipTrigger>
               <TooltipContent>Emoji</TooltipContent>
             </Tooltip>
-            
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <button
-                  type="button"
-                  onClick={() => fileInputRef.current?.click()}
-                  className="p-2 hover:bg-gray-100 rounded-full transition-colors"
-                >
-                  <Paperclip className="h-5 w-5 text-gray-500" />
-                </button>
-              </TooltipTrigger>
-              <TooltipContent>Attach files</TooltipContent>
-            </Tooltip>
           </>
         )}
+        
+        {/* Always show attachment button */}
+        <button
+          type="button"
+          onClick={() => fileInputRef.current?.click()}
+          className="p-2 hover:bg-gray-100 rounded-full transition-colors text-gray-500"
+          aria-label="Attach files"
+        >
+          <Paperclip className="h-5 w-5" />
+        </button>
         
         <Input
           type="text"

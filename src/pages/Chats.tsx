@@ -1,3 +1,4 @@
+
 import { useIsMobile } from "@/hooks/use-mobile";
 import ChatThread from "@/components/ChatThread";
 import { ArrowLeft } from "lucide-react";
@@ -13,7 +14,9 @@ const Chats = () => {
   const [currentProject, setCurrentProject] = useState("main");
   const [isProgressDialogOpen, setIsProgressDialogOpen] = useState(false);
   const [selectedProject, setSelectedProject] = useState<string | null>(null);
-  const [expandedProjects, setExpandedProjects] = useState<Record<string, boolean>>({});
+  const [expandedProjects, setExpandedProjects] = useState<Record<string, boolean>>({
+    main: true // Set main project as expanded by default
+  });
 
   useEffect(() => {
     if (!isMobile) {
@@ -58,7 +61,7 @@ const Chats = () => {
       <div className="h-screen bg-gray-50 flex flex-col">
         {currentView === "chat" ? (
           <>
-            <div className="fixed top-0 left-0 right-0 z-10 bg-primary text-white shadow-md">
+            <div className="fixed top-0 left-0 right-0 z-20 bg-primary text-white shadow-md">
               <div className="flex items-center p-4">
                 <button 
                   onClick={handleBack} 
