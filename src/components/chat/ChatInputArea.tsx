@@ -29,7 +29,7 @@ export const ChatInputArea = ({
   };
 
   return (
-    <div className="sticky bottom-0 border-t p-4 bg-white shadow-lg w-full z-10">
+    <div className="sticky bottom-0 border-t py-2 px-3 bg-white shadow-lg w-full z-20">
       <form onSubmit={handleSubmit} className="flex items-center gap-2 max-w-3xl mx-auto">
         {/* Hidden file inputs */}
         <input
@@ -54,75 +54,58 @@ export const ChatInputArea = ({
           onChange={onFileUpload}
         />
         
-        {/* Always show image and video buttons */}
-        <button
-          type="button"
-          onClick={() => imageInputRef.current?.click()}
-          className="p-2 hover:bg-gray-100 rounded-full transition-colors text-gray-500"
-          aria-label="Add image"
-        >
-          <ImageIcon className="h-5 w-5" />
-        </button>
-        
-        <button
-          type="button"
-          onClick={() => videoInputRef.current?.click()}
-          className="p-2 hover:bg-gray-100 rounded-full transition-colors text-gray-500"
-          aria-label="Add video"
-        >
-          <VideoIcon className="h-5 w-5" />
-        </button>
-        
-        {/* On desktop, add more buttons */}
-        {!isMobile && (
-          <>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <button
-                  type="button"
-                  className="p-2 hover:bg-gray-100 rounded-full transition-colors"
-                >
-                  <Smile className="h-5 w-5 text-gray-500" />
-                </button>
-              </TooltipTrigger>
-              <TooltipContent>Emoji</TooltipContent>
-            </Tooltip>
-          </>
-        )}
-        
-        {/* Always show attachment button */}
-        <button
-          type="button"
-          onClick={() => fileInputRef.current?.click()}
-          className="p-2 hover:bg-gray-100 rounded-full transition-colors text-gray-500"
-          aria-label="Attach files"
-        >
-          <Paperclip className="h-5 w-5" />
-        </button>
+        <div className="flex items-center gap-1">
+          <button
+            type="button"
+            onClick={() => imageInputRef.current?.click()}
+            className="p-1.5 hover:bg-gray-100 rounded-full transition-colors text-gray-500"
+            aria-label="Add image"
+          >
+            <ImageIcon className={isMobile ? "h-4 w-4" : "h-5 w-5"} />
+          </button>
+          
+          <button
+            type="button"
+            onClick={() => videoInputRef.current?.click()}
+            className="p-1.5 hover:bg-gray-100 rounded-full transition-colors text-gray-500"
+            aria-label="Add video"
+          >
+            <VideoIcon className={isMobile ? "h-4 w-4" : "h-5 w-5"} />
+          </button>
+          
+          <button
+            type="button"
+            onClick={() => fileInputRef.current?.click()}
+            className="p-1.5 hover:bg-gray-100 rounded-full transition-colors text-gray-500"
+            aria-label="Attach files"
+          >
+            <Paperclip className={isMobile ? "h-4 w-4" : "h-5 w-5"} />
+          </button>
+        </div>
         
         <Input
           type="text"
           value={message}
           onChange={(e) => setMessage(e.target.value)}
           placeholder={isMobile ? "Message..." : "Type a message..."}
-          className="flex-1 rounded-full bg-gray-100 text-sm md:text-base"
+          className="flex-1 rounded-full bg-gray-100 text-sm md:text-base h-9 min-h-9"
         />
         
         {!message.trim() ? (
           <button
             type="button"
-            className="p-2 hover:bg-gray-100 rounded-full transition-colors text-gray-500"
+            className="p-1.5 hover:bg-gray-100 rounded-full transition-colors text-gray-500"
             aria-label="Voice message"
           >
-            <Mic className="h-5 w-5" />
+            <Mic className={isMobile ? "h-4 w-4" : "h-5 w-5"} />
           </button>
         ) : (
           <button
             type="submit"
-            className="rounded-full bg-primary p-2 text-white hover:bg-primary/90 transition-colors"
+            className="rounded-full bg-primary p-1.5 text-white hover:bg-primary/90 transition-colors"
             aria-label="Send message"
           >
-            <SendIcon className="h-5 w-5" />
+            <SendIcon className={isMobile ? "h-4 w-4" : "h-5 w-5"} />
           </button>
         )}
       </form>

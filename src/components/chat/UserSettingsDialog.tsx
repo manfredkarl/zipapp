@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { ImageIcon } from "lucide-react";
 import { useState, useRef } from "react";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface UserSettingsDialogProps {
   isOpen: boolean;
@@ -15,6 +16,7 @@ export const UserSettingsDialog = ({ isOpen, onOpenChange }: UserSettingsDialogP
   const [name, setName] = useState("John Smith");
   const [avatarUrl, setAvatarUrl] = useState("/placeholder.svg");
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const isMobile = useIsMobile();
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -26,13 +28,13 @@ export const UserSettingsDialog = ({ isOpen, onOpenChange }: UserSettingsDialogP
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent>
+      <DialogContent className={isMobile ? "w-[calc(100%-2rem)] max-w-md p-4" : ""}>
         <DialogHeader>
           <DialogTitle>Account Settings</DialogTitle>
         </DialogHeader>
         <div className="space-y-6">
           <div className="flex flex-col items-center gap-4">
-            <Avatar className="h-24 w-24">
+            <Avatar className="h-20 w-20">
               <AvatarImage src={avatarUrl} />
               <AvatarFallback>{name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
             </Avatar>
@@ -47,6 +49,7 @@ export const UserSettingsDialog = ({ isOpen, onOpenChange }: UserSettingsDialogP
               variant="outline" 
               onClick={() => fileInputRef.current?.click()}
               className="flex gap-2"
+              size={isMobile ? "sm" : "default"}
             >
               <ImageIcon className="h-4 w-4" />
               Change Picture

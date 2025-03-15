@@ -58,33 +58,35 @@ const Chats = () => {
 
   if (isMobile) {
     return (
-      <div className="h-screen bg-gray-50 flex flex-col">
+      <div className="h-screen flex flex-col bg-gray-50 overflow-hidden">
         {currentView === "chat" ? (
           <>
             <div className="fixed top-0 left-0 right-0 z-20 bg-primary text-white shadow-md">
-              <div className="flex items-center p-4">
+              <div className="flex items-center p-3">
                 <button 
                   onClick={handleBack} 
-                  className="p-2 -ml-2 hover:bg-primary-foreground/10 rounded-full transition-colors"
+                  className="p-1.5 hover:bg-primary-foreground/10 rounded-full transition-colors"
                 >
-                  <ArrowLeft className="h-6 w-6" />
+                  <ArrowLeft className="h-5 w-5" />
                 </button>
                 <span className="ml-2 font-medium truncate">
                   {chatList[currentProject]?.name}
                 </span>
               </div>
             </div>
-            <div className="flex-1 pt-16 pb-0 flex flex-col">
+            <div className="flex-1 pt-14 flex flex-col h-[calc(100vh-56px)]">
               <ChatThread projectId={currentProject} />
             </div>
           </>
         ) : (
-          <ChatList
-            onProjectSelect={handleProjectSelect}
-            onProgressClick={handleProgressClick}
-            expandedProjects={expandedProjects}
-            onProjectExpand={toggleProjectExpand}
-          />
+          <div className="flex-1 overflow-y-auto">
+            <ChatList
+              onProjectSelect={handleProjectSelect}
+              onProgressClick={handleProgressClick}
+              expandedProjects={expandedProjects}
+              onProjectExpand={toggleProjectExpand}
+            />
+          </div>
         )}
 
         <ProgressDialog
@@ -98,8 +100,8 @@ const Chats = () => {
   }
 
   return (
-    <div className="flex h-screen bg-gray-50">
-      <div className="w-80 border-r bg-white shadow-lg">
+    <div className="flex h-screen bg-gray-50 overflow-hidden">
+      <div className="w-80 border-r bg-white shadow-lg overflow-y-auto">
         <ChatList
           onProjectSelect={handleProjectSelect}
           onProgressClick={handleProgressClick}
@@ -107,7 +109,7 @@ const Chats = () => {
           onProjectExpand={toggleProjectExpand}
         />
       </div>
-      <div className="flex-1 flex flex-col">
+      <div className="flex-1 flex flex-col overflow-hidden">
         <div className="bg-white p-4 shadow-md flex items-center">
           <Link to="/" className="p-2 hover:bg-gray-100 rounded-full transition-colors">
             <ArrowLeft className="h-5 w-5 text-gray-600" />

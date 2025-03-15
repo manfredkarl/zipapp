@@ -1,7 +1,8 @@
+
 #root {
-  max-width: 1280px;
+  max-width: 100%;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 0;
   text-align: center;
 }
 
@@ -39,4 +40,34 @@
 
 .read-the-docs {
   color: #888;
+}
+
+/* Mobile specific styles */
+@media (max-width: 768px) {
+  .mobile-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 50;
+    background: white;
+    border-top: 1px solid #e5e7eb;
+    padding: 0.5rem;
+  }
+  
+  .mobile-content {
+    padding-bottom: 60px; /* Account for bottom navigation */
+  }
+  
+  .mobile-dialog {
+    width: calc(100% - 2rem);
+    max-width: 28rem;
+  }
+}
+
+/* Fix for iOS viewport height issues */
+@supports (-webkit-touch-callout: none) {
+  .h-screen {
+    height: -webkit-fill-available;
+  }
 }

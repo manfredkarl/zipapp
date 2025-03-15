@@ -34,6 +34,7 @@ export const ChatMessageArea = ({ messages }: ChatMessageAreaProps) => {
   const isMobile = useIsMobile();
   const scrollAreaRef = useRef<HTMLDivElement>(null);
 
+  // Auto-scroll to the bottom when new messages arrive
   useEffect(() => {
     if (scrollAreaRef.current) {
       scrollAreaRef.current.scrollTop = scrollAreaRef.current.scrollHeight;
@@ -43,10 +44,10 @@ export const ChatMessageArea = ({ messages }: ChatMessageAreaProps) => {
   return (
     <ScrollArea 
       ref={scrollAreaRef} 
-      className="flex-1 p-4"
+      className="flex-1 p-4 overflow-y-auto"
       style={{ 
         height: isMobile 
-          ? 'calc(100vh - 240px)' // Adjusted height for mobile to account for bottom input and action button
+          ? 'calc(100vh - 180px)' // Reduced height for mobile to account for the input area
           : 'calc(100vh - 180px)' 
       }}
     >
